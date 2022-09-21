@@ -107,4 +107,4 @@ def api_all():
     return jsonify(res)
 
 
-app.run(threaded=True, port=5000)
+app.run(threaded=True)
