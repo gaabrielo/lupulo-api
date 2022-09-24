@@ -2,6 +2,8 @@
 import flask
 from flask import request, jsonify
 from flask_cors import cross_origin
+# import os
+# from run import app as application
 
 # data manipulation
 import requests
@@ -108,5 +110,9 @@ def api_all():
 
     return jsonify(res)
 
+# app.run(threaded=True, port=3333)
 
-app.run(threaded=True, port=3333)
+if __name__ == '__main__':
+# Bind to PORT if defined, otherwise default to 5000.
+    # port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=3333)
