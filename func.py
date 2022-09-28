@@ -1,9 +1,11 @@
 import datetime
-
+from pytz import timezone
 
 
 def horarioDepois16():
-    hora = datetime.datetime.now()
+    # hora = datetime.datetime.now()
+    hora = datetime.datetime.now().astimezone(timezone('America/Sao_Paulo'))
+    print(hora)
     return hora.hour > 16
 
 
