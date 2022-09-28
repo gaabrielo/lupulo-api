@@ -12,9 +12,10 @@ import pytz
 import pandas as pd
 
 # expert system
+import system
+import func
 # from experta import *
 # from regras import *
-# import func
 
 # global weather_data, temp, humidity, alturaMaior6, umidadeSolo
 
@@ -30,7 +31,21 @@ def get_weather_data():
     weather_data = res.json()
     return weather_data
 
-# def get_irrigation_status(temp, umidadeAr, condClima, aux, aux2):
+def get_irrigation_status(temp, umidadeAr, condClima, aux, aux2):
+    res = system.irrigation(TemperaturaAcima30=func.temperaturaAcima30(temp),
+                        Temperatura20_30=func.temperatura20_30(temp),
+                        Temperatura10_20=func.temperatura10_20(temp),
+                        TemperaturaMinima=func.temperaturaMinima(temp),
+                        UmidadeArAbaixo50=func.umidadeArAbaixo50(
+                            umidadeAr),
+                        UmidadeArAbaixo30=func.umidadeArAbaixo30(
+                            umidadeAr),
+                        UmidadeAr=func.umidadeAr50(umidadeAr),
+                        TempChuva=func.tempChuva(condClima),
+                        UmidadeSoloAcima60=func.UmidadeSoloAcima60(aux),
+                        UmidadeSoloAbaixo60=func.UmidadeSoloAbaixo60(aux),
+                        PlantaAcima6=aux2,
+                        HorarioLimite=func.horarioDepois16())
 #     engine.reset()
 #     engine.declare(Fact(TemperaturaAcima30=func.temperaturaAcima30(temp),
 #                         Temperatura20_30=func.temperatura20_30(temp),
@@ -54,8 +69,7 @@ def get_weather_data():
 
 #     engine.reset()
 
-
-#     return res
+    return res
 
 
 app = flask.Flask(__name__)
@@ -95,18 +109,16 @@ def api_all():
     condClima = weather_data['weather'][0]['main']
     quantidade_sol_diaria = (pd.date_range(dt_start, dt_end, freq="1H").strftime('%H')).array.size
 
-    # res = get_irrigation_status(
-    #     temp,
-    #     humidity,
-    #     condClima,
-    #     umidadeSolo,
-    #     alturaMaior6,
-    # )
+    res = get_irrigation_status(
+        temp,
+        humidity,
+        condClima,
+        umidadeSolo,
+        alturaMaior6,
+    )
 
-    # if (res):
-    #     res.append(quantidade_sol_diaria)
-
-    res = weather_data
+    if (res):
+        res.append(quantidade_sol_diaria)
 
     return jsonify(res)
 

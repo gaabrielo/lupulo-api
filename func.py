@@ -1,3 +1,12 @@
+import datetime
+
+
+
+def horarioDepois16():
+    hora = datetime.datetime.now()
+    return hora.hour > 16
+
+
 def temperaturaAcima30(temp):
     return temp >= 30
 
